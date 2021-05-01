@@ -1,0 +1,2 @@
+# gamelib.lutris
+Gamedek plugin
