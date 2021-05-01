@@ -1,2 +1,2 @@
 # gamelib.lutris
-Gamedek plugin
+Gamedek plugin for importing game entries from Lutris
