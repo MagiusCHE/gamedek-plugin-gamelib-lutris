@@ -84,11 +84,11 @@ class myplugin extends global.Plugin {
         if (!newargsinfo.tabs) {
             newargsinfo.tabs = {}
         }
-        
+
         if (action != 'import.lutris') {
             return newargsinfo
         }
-        
+
         newargsinfo.tabs.lutris = {
             order: "1"
             , title: await kernel.translateBlock('${lang.ge_lutris_tablu}')
@@ -140,6 +140,7 @@ class myplugin extends global.Plugin {
             const games = await kernel.gameList_getGamesByProvider('import.lutris')
 
             for (const game of list) {
+                this.log(`Updating %o`, game)
 
                 const res = results.find(g => g.id == game.id)
 
@@ -184,15 +185,13 @@ class myplugin extends global.Plugin {
                     //verify 
                     if (newone.props.info.imagelandscape) {
                         const rpath = (await kernel.broadcastPluginMethod(undefined, 'getPathbyGameHash', newone.hash, { path: newone.props.info.imagelandscape })).returns.last.path
-
-                        if (rpath && fs.statSync(rpath).mtime > fs.statSync(banner).mtime) {
+                        if (rpath && (!banner || fs.statSync(rpath).mtime > fs.statSync(banner).mtime)) {
                             banner = newone.props.info.imagelandscape
                         }
                     }
                     if (newone.props.info.icon) {
                         const rpath = (await kernel.broadcastPluginMethod(undefined, 'getPathbyGameHash', newone.hash, { path: newone.props.info.icon })).returns.last.path
-
-                        if (rpath && fs.statSync(rpath).mtime > fs.statSync(icon).mtime) {
+                        if (rpath && (!icon || fs.statSync(rpath).mtime > fs.statSync(icon).mtime)) {
                             icon = newone.props.info.icon
                         }
                     }
@@ -201,7 +200,6 @@ class myplugin extends global.Plugin {
                 newone.props.info.imagelandscape = banner
                 newone.props.info.icon = icon
                 newone.props.info.year = res.year || new Date().getFullYear()
-
                 let response = await kernel.broadcastPluginMethod('gameengine', `confirmGameParams`, newone, {})
                 let ret = response.returns.last
 
