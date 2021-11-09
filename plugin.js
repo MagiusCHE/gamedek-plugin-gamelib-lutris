@@ -332,7 +332,7 @@ class myplugin extends global.Plugin {
         const args = {
             executable: this.#lutrisBin,
             detached: true,
-            env: game.props.system?.env,
+            env: { ...process.env, ...game.props.system?.env },
             arguments: 'lutris:rungameid/' + game.props.lutris.id
         }
         const ret = (await kernel.broadcastPluginMethod('fileservice', 'spawnBinOrScript', args)).returns.last
