@@ -297,7 +297,8 @@ class myplugin extends global.Plugin {
         }
         await kernel.gameList.setGameStoppedByHash(hash, {
             error: ret?.returns?.exit?.error,
-            std: ret?.returns?.exit?.log,
+            stdout: ret?.returns?.exit?.std,
+            stdcmd: ret?.returns?.exit?.log,
             stderr: ret?.returns?.exit?.err
         })
     }
@@ -340,7 +341,8 @@ class myplugin extends global.Plugin {
         if (ret.error) {
             await kernel.gameList.setGameStoppedByHash(hash, {
                 error: ret.error,
-                std: log.join('\n'),
+                stdcmb: log.join('\n'),
+                stdout: std.join('\n'),
                 stderr: err.join('\n')
             })
         } else {
